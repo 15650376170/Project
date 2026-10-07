@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吕式裕 · 个人主页</title>
+<style>
+  :root {
+    --bg: #05070d;
+    --bg-soft: #0a0f1c;
+    --panel: rgba(16, 24, 40, 0.6);
+    --line: rgba(56, 189, 248, 0.18);
+    --cyan: #38bdf8;
+    --cyan-bright: #22d3ee;
+    --violet: #818cf8;
+    --text: #e2e8f0;
+    --muted: #7c8aa5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* 背景网格 + 光晕 */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 50% 20%, #000 30%, transparent 75%);
+  }
+  .bg-glow {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(600px 400px at 15% 10%, rgba(56,189,248,0.14), transparent 60%),
+      radial-gradient(500px 400px at 85% 30%, rgba(129,140,248,0.12), transparent 60%);
+  }
+
+  a { color: var(--cyan); text-decoration: none; }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* 导航 */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(12px);
+    background: rgba(5,7,13,0.6);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: "Consolas", "SFMono-Regular", monospace;
+    font-weight: 700;
+    color: var(--cyan-bright);
+    letter-spacing: 1px;
+  }
+  .logo span { color: var(--violet); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--muted); font-size: 15px; transition: color .2s; }
+  .nav-links a:hover { color: var(--cyan-bright); }
+
+  /* Hero */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    padding: 80px 0 72px;
+    min-height: calc(100vh - 64px);
+  }
+  .hero-text { flex: 1; }
+  .tag {
+    display: inline-block;
+    font-family: "Consolas", monospace;
+    font-size: 13px;
+    color: var(--cyan-bright);
+    border: 1px solid var(--line);
+    background: rgba(56,189,248,0.08);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .hero-text h1 {
+    font-size: 56px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  .hero-text h1 .grad {
+    background: linear-gradient(90deg, var(--cyan-bright), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-text .subtitle {
+    font-family: "Consolas", monospace;
+    color: var(--cyan);
+    font-size: 18px;
+    margin-top: 12px;
+    letter-spacing: 1px;
+  }
+  .hero-text .desc {
+    color: var(--muted);
+    margin-top: 22px;
+    max-width: 520px;
+    font-size: 16px;
+  }
+  .hero-actions { display: flex; gap: 16px; margin-top: 32px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    color: #fff;
+    box-shadow: 0 0 24px rgba(56,189,248,0.35);
+    border: none;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 34px rgba(56,189,248,0.55); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--cyan-bright);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { background: rgba(56,189,248,0.08); }
+
+  .hero-avatar {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar-ring {
+    width: 300px;
+    height: 300px;
+    border-radius: 24px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--cyan-bright), var(--violet));
+    box-shadow: 0 0 50px rgba(56,189,248,0.3);
+  }
+  .avatar-ring img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 22px;
+    display: block;
+  }
+
+  /* 区块通用 */
+  section { padding: 72px 0; }
+  .sec-title {
+    font-family: "Consolas", monospace;
+    font-size: 14px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .sec-title::before { content: "// "; color: var(--violet); }
+  .sec-head { margin-bottom: 40px; }
+  .sec-head h2 { font-size: 34px; font-weight: 800; }
+
+  /* 关于 */
+  .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .stat {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+    backdrop-filter: blur(8px);
+    transition: all .2s;
+  }
+  .stat:hover { border-color: rgba(56,189,248,0.5); transform: translateY(-3px); }
+  .stat .num {
+    font-family: "Consolas", monospace;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cyan-bright);
+  }
+  .stat .label { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  /* 技能 */
+  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .skill { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .skill .name { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 12px; }
+  .skill .name span:last-child { color: var(--cyan); font-family: "Consolas", monospace; }
+  .bar { height: 6px; background: rgba(56,189,248,0.1); border-radius: 999px; overflow: hidden; }
+  .bar i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--cyan-bright), var(--violet));
+    box-shadow: 0 0 12px rgba(56,189,248,0.6);
+  }
+
+  /* 项目 */
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .project {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px;
+    transition: all .2s;
+  }
+  .project:hover { border-color: rgba(56,189,248,0.5); transform: translateY(-3px); }
+  .project .p-icon { font-size: 26px; margin-bottom: 14px; }
+  .project h3 { font-size: 19px; margin-bottom: 8px; }
+  .project p { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .project .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .project .tags span {
+    font-family: "Consolas", monospace;
+    font-size: 12px;
+    color: var(--cyan-bright);
+    background: rgba(56,189,248,0.08);
+    border: 1px solid var(--line);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+
+  /* 联系 */
+  .contact {
+    text-align: center;
+    background: var(--bg-soft);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .contact .desc { color: var(--muted); max-width: 520px; margin: 0 auto 32px; }
+  .contact-list { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; }
+  .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: "Consolas", monospace;
+    transition: all .2s;
+  }
+  .contact-item:hover { border-color: var(--cyan); color: var(--cyan-bright); }
+
+  footer {
+    padding: 28px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: "Consolas", monospace;
+  }
+
+  @media (max-width: 860px) {
+    .hero { flex-direction: column-reverse; text-align: center; gap: 40px; }
+    .hero-text .desc { margin: 0 auto; }
+    .hero-actions { justify-content: center; }
+    .about-grid, .skills-grid, .projects-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-text h1 { font-size: 42px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<nav>
+  <div class="container nav-inner">
+    <div class="logo">LV<span>SHIYU</span> / 吕式裕</div>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#skills">技能</a>
+      <a href="#projects">项目</a>
+      <a href="#contact">联系</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero container">
+  <div class="hero-text">
+    <span class="tag">SYSTEM ONLINE · 个人主页</span>
+    <h1>你好，我是<br><span class="grad">吕式裕</span></h1>
+    <p class="subtitle">// Full-Stack Developer</p>
+    <p class="desc">
+      热爱技术与创造，专注于打造简洁、高效的数字化产品。
+      相信代码可以连接想法与现实，持续探索前沿技术边界。
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#projects">查看作品 →</a>
+      <a class="btn btn-ghost" href="#contact">联系我</a>
+    </div>
+  </div>
+  <div class="hero-avatar">
+    <div class="avatar-ring">
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=futuristic%20digital%20avatar%20portrait%2C%20abstract%20cyberpunk%20profile%2C%20neon%20cyan%20and%20violet%20glow%2C%20holographic%20circuit%20patterns%2C%20dark%20tech%20background%2C%20glowing%20particles%2C%20high%20detail%2C%20sci-fi&image_size=square" alt="吕式裕头像">
+    </div>
+  </div>
+</header>
+
+<section id="about" class="container">
+  <div class="sec-head">
+    <div class="sec-title">About</div>
+    <h2>关于我</h2>
+  </div>
+  <div class="about-grid">
+    <div class="stat">
+      <div class="num">3+</div>
+      <div class="label">年开发经验</div>
+    </div>
+    <div class="stat">
+      <div class="num">20+</div>
+      <div class="label">完成项目</div>
+    </div>
+    <div class="stat">
+      <div class="num">∞</div>
+      <div class="label">学习热情</div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="container">
+  <div class="sec-head">
+    <div class="sec-title">Skills</div>
+    <h2>技能栈</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill">
+      <div class="name"><span>JavaScript / TypeScript</span><span>90%</span></div>
+      <div class="bar"><i style="width:90%"></i></div>
+    </div>
+    <div class="skill">
+      <div class="name"><span>Vue / React</span><span>85%</span></div>
+      <div class="bar"><i style="width:85%"></i></div>
+    </div>
+    <div class="skill">
+      <div class="name"><span>Node.js</span><span>80%</span></div>
+      <div class="bar"><i style="width:80%"></i></div>
+    </div>
+    <div class="skill">
+      <div class="name"><span>Python</span><span>75%</span></div>
+      <div class="bar"><i style="width:75%"></i></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="container">
+  <div class="sec-head">
+    <div class="sec-title">Projects</div>
+    <h2>精选项目</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project">
+      <div class="p-icon">🖥️</div>
+      <h3>项目名称 A</h3>
+      <p>在这里简要描述项目的功能、亮点和你负责的部分。</p>
+      <div class="tags"><span>Vue</span><span>Node.js</span><span>WebSocket</span></div>
+    </div>
+    <div class="project">
+      <div class="p-icon">🤖</div>
+      <h3>项目名称 B</h3>
+      <p>在这里简要描述项目的功能、亮点和你负责的部分。</p>
+      <div class="tags"><span>Python</span><span>AI</span><span>FastAPI</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="sec-head" style="text-align:center">
+      <div class="sec-title">Contact</div>
+      <h2>联系我</h2>
+    </div>
+    <p class="desc">欢迎交流合作，或聊聊技术、产品与创意。随时可以给我留言。</p>
+    <div class="contact-list">
+      <a class="contact-item" href="mailto:your@email.com">✉️ your@email.com</a>
+      <a class="contact-item" href="#">🐙 GitHub</a>
+      <a class="contact-item" href="#">💬 微信</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">© 2026 吕式裕 · 用代码构建未来</div>
+</footer>
+</body>
+</html>
